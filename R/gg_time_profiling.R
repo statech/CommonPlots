@@ -138,7 +138,8 @@
 #' )
 #'
 #'
-#' @import dplyr, directlabels
+#' @import dplyr
+#' @import directlabels
 #' @export
 #' @author Feiyang Niu (Feiyang.Niu@gilead.com)
 gg_time_profiling <- function(data, x, y, subject = NULL,

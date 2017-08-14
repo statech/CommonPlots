@@ -157,10 +157,12 @@ library(CommonPlots)
 data(koopLME)
 
 # Mean + SE plot
-gg_time_profiling(koopLME, x = 'TIMETRND', y = 'LOGWAGE',
-                  geoms = c('sumline'), avg_method = 'mean',
-                  var_method = 'se', x_lab = 'Time trend',
-                  y_lab = 'Log of hourly wage', title = 'Mean + SE plot')
+mean_se_plot <- gg_time_profiling(
+    koopLME, x = 'TIMETRND', y = 'LOGWAGE',
+    geoms = c('sumline'), avg_method = 'mean',
+    var_method = 'se', x_lab = 'Time trend',
+    y_lab = 'Log of hourly wage', title = 'Mean + SE plot'
+)
 
 # Median + IQR plot
 data <- koopLME
@@ -179,15 +181,17 @@ data <- koopLME
 data <- with(data, data[PERSONID \%in\% unique(PERSONID)[1:100], ])
 spaghetti_plot <- gg_time_profiling(
     data, x = 'TIMETRND', y = 'LOGWAGE', subject = 'PERSONID',
-    geoms = c('line', 'point'), x_lab = 'Time trend',
-    y_lab = 'Log of hourly wage', title = 'Spaghetti plot'
+    geoms = c('line'), x_lab = 'Time trend',
+    y_lab = 'Log of hourly wage', title = 'Spaghetti plot',
+    subject_show = TRUE
 )
 
 # Box plot over time
 boxplot <- gg_time_profiling(
     koopLME, x = 'TIMETRND', y = 'LOGWAGE',
     geoms = c('boxplot', 'point'), x_lab = 'Time trend',
-    y_lab = 'Log of hourly wage', title = 'Box plot', sample_size = FALSE
+    y_lab = 'Log of hourly wage', title = 'Box plot',
+    sample_size = FALSE, all_xticks = TRUE
 )
 
 
