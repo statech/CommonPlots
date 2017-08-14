@@ -1,0 +1,25 @@
+#' Koop and Tobias (2004) Labor Market Experience Data
+#'
+#' The data file is in two parts. The first file contains the panel of 17,919
+#' observations on the Person ID and 4 time-varying variables. The second file
+#' contains time invariant variables for the individual or the 2,178 households.
+#' The data were downloaded from the Journal of Applied Econometrics archive
+#' website. The two data sets are merged in the .csv and .lpj files noted. See
+#' Koop, G. and J. Tobias, "Learning About Heterogeneity in Returns to
+#' Schooling," Journal of Applied Econometrics, 19, 2004, pp. 827-849.
+#'
+#' @format A data frame with 17919 rows and 10 variables:
+#' \describe{
+#'   \item{PERSONID }{Person id, ranging from 1 to 2,178}
+#'   \item{EDUC}{Education}
+#'   \item{LOGWAGE}{Log of hourly wage}
+#'   \item{POTEXPER}{Potential experience}
+#'   \item{TIMETRND}{Time trend}
+#'   \item{ABILITY}{Ability}
+#'   \item{MOTHERED}{Mother's education}
+#'   \item{FATHERED}{Father's education}
+#'   \item{BRKNHOME}{Dummy variable for residence in a broken home}
+#'   \item{SIBLINGS}{Number of siblings}
+#' }
+#' @source \url{http://people.stern.nyu.edu/wgreene/Econometrics/PanelDataSets.htm}
+"koopLME"
