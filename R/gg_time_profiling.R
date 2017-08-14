@@ -115,9 +115,10 @@
 #' data <- koopLME
 #' data$siblings <- factor(with(data, ifelse(SIBLINGS >= 3, '>= 3', SIBLINGS)),
 #'                         levels = c(0, 1, 2, '>= 3'))
-#' levels(data$siblings) <- paste('Number of siblings:', levels(data$siblings))
+#' sib_labels <- paste('Number of siblings:', levels(data$siblings))
 #' median_iqr_plot <- gg_time_profiling(
 #'     data, x = 'TIMETRND', y = 'LOGWAGE', facet_c = 'siblings',
+#'     facet_c_levels = setNames(levels(data$siblings), sib_labels),
 #'     geoms = c('sumline'), avg_method = 'median',
 #'     x_lab = 'Time trend', y_lab = 'Log of hourly wage',
 #'     title = 'Median + IQR plot'
