@@ -161,7 +161,7 @@ data <- koopLME
 data$siblings <- factor(with(data, ifelse(SIBLINGS >= 3, '>= 3', SIBLINGS)),
                         levels = c(0, 1, 2, '>= 3'))
 mean_se_plot <- gg_time_profiling(
-    koopLME, x = 'TIMETRND', y = 'LOGWAGE', group = 'siblings',
+    data, x = 'TIMETRND', y = 'LOGWAGE', group = 'siblings',
     geoms = c('sumline'), avg_method = 'mean',
     var_method = 'se', x_lab = 'Time trend',
     y_lab = 'Log of hourly wage', group_lab = 'Number of siblings',
