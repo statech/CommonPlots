@@ -5,15 +5,17 @@
 #'
 #' This function relies on \href{http://ggplot2.org/}{ggplot2} package to
 #' create time-profiling plots including: Mean + SD/SE plot, Mean + Median
-#' plot, Boxplot, Spaghetti plot and their mixture. Panel plot layout is
-#' supported. By default black-and-white theme is used.
+#' plot, Boxplot, Spaghetti plot and their mixture. Labels can be added to the
+#' end of each line using
+#' \href{http://directlabels.r-forge.r-project.org/}{directlabels}.
+#' Panel plot layout is supported. By default black-and-white theme is used.
 #'
 #' @param data Data frame: default dataset to use for plot
 #' @param x Character: name of a \code{data} column mapped to x-axis
 #'  variable, i.e. time
 #' @param y Character: name of a \code{data} column mapped to y-axis
 #'  variable
-#' @param subject Character: name of a \code{data} column mapped subject IDs
+#' @param subject Character: name of a \code{data} column mapped to subject IDs
 #'  or other types of IDs that define membership of repeated measurements in
 #'  the data
 #' @param group Character: name of a \code{data} column mapped to the fill of
