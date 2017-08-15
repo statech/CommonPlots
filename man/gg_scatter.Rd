@@ -61,7 +61,7 @@ the point colors. See \code{\link{is.color}} for valid color definition}
 of the points}
 
 \item{all_shapes}{Vector: a vector of all the point shapes. See
-\href{ggplot2 Quick Reference: shape}{http://sape.inf.usi.ch/quick-reference/ggplot2/shape}}
+\href{http://sape.inf.usi.ch/quick-reference/ggplot2/shape}{ggplot2 Quick Reference: shape}}
 
 \item{shape_lab}{Character: title of shape legend}
 
@@ -144,9 +144,17 @@ used.
 \examples{
 data <- mtcars
 data$model <- row.names(data)
+data$cyl <- factor(data$cyl)
 gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', color_var = 'cyl',
            color_lab = 'Cylinder', add_label = TRUE, repel_label = TRUE,
-           label_xlim = c(2, 5), label_xloc = 'sides')
+           label_xlim = c(2, 5), label_xloc = 'sides',
+           x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
+
+gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', facet_c = 'cyl',
+           facet_c_levels = c('4 Cylinders' = '4', '6 Cylinders' = '6',
+                              '8 Cylinders' = '8'),
+           add_label = TRUE, repel_label = TRUE,
+           x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
 
 }
 \author{

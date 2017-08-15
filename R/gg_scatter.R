@@ -39,7 +39,7 @@
 #' @param shape_var Character name of a \code{data} column mapped to the shape
 #'  of the points
 #' @param all_shapes Vector: a vector of all the point shapes. See
-#'  \href{ggplot2 Quick Reference: shape}{http://sape.inf.usi.ch/quick-reference/ggplot2/shape}
+#'  \href{http://sape.inf.usi.ch/quick-reference/ggplot2/shape}{ggplot2 Quick Reference: shape}
 #' @param shape_lab Character: title of shape legend
 #' @param add_label Logical: whether or not to add labels for the points
 #'  Default is set to `FALSE`
@@ -90,9 +90,17 @@
 #' @examples
 #' data <- mtcars
 #' data$model <- row.names(data)
+#' data$cyl <- factor(data$cyl)
 #' gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', color_var = 'cyl',
 #'            color_lab = 'Cylinder', add_label = TRUE, repel_label = TRUE,
-#'            label_xlim = c(2, 5), label_xloc = 'sides')
+#'            label_xlim = c(2, 5), label_xloc = 'sides',
+#'            x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
+#'
+#' gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', facet_c = 'cyl',
+#'            facet_c_levels = c('4 Cylinders' = '4', '6 Cylinders' = '6',
+#'                               '8 Cylinders' = '8'),
+#'            add_label = TRUE, repel_label = TRUE,
+#'            x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
 #'
 #' @export
 #'
