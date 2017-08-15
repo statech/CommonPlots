@@ -10,15 +10,22 @@
 #' @param data Data frame: default dataset to use for plot
 #' @param var Character: name of a \code{data} column whose counts provided as
 #'  the height of bars
-#' @param var_levels Character vector: levels of \code{var}
+#' @param var_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{var}
 #' @param group Character: name of a \code{data} column mapped to the fill of
 #'  bars
+#' @param group_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{group}
 #' @param facet_r Character: name of a \code{data} column mapped to the facet
 #'  row in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for more
 #'  details
 #' @param facet_c Character: name of a \code{data} column mapped to the facet
 #'  column in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for
 #'  more details
+#' @param facet_r_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{facet_r}
+#' @param facet_c_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{facet_c}
 #' @param facet_scale Character: Are scales shared across all facets. Refer to
 #'  the `scale` argument in \code{\link[ggplot2]{facet_grid}}. Default `free`
 #'  means that scales are not shared
@@ -27,6 +34,7 @@
 #'  width will vary
 #' @param x_lab Character: x-axis label
 #' @param y_lab Character: y-axis label
+#' @param group_lab Character: group variable label
 #' @param title Character: barplot title
 #' @param add_counts Logical: If `TRUE` (default), counts will be added to the
 #'  bars
@@ -57,9 +65,11 @@
 #'  \code{\link{print}}
 #'
 #' @examples
-#' gg_barplot(mpg, var = 'class', horizontal = FALSE)
-#' gg_barplot(mpg, var = 'class', group = 'cyl')
-#' gg_barplot(mpg, var = 'class', group = 'cyl', add_counts = FALSE)
+#' gg_barplot(mpg, var = 'class', x_lab = '', horizontal = FALSE)
+#' gg_barplot(mpg, var = 'class', group = 'cyl', group_lab = 'Cylinders')
+#' var_levels <- c('Mid-size' = 'midsize', 'Minivan' = 'minivan', 'SUV' = 'suv')
+#' gg_barplot(mpg, var = 'class', var_levels = var_levels,
+#'            group = 'cyl', group_lab = 'Cylinders', add_counts = FALSE)
 #' gg_barplot(mpg, var = 'class', group = 'cyl', group_bar_position = 'stack')
 #'
 #' @import dplyr
@@ -67,11 +77,12 @@
 #'
 #' @author Feiyang Niu (Feiyang.Niu@gilead.com)
 gg_barplot <- function(data, var, var_levels = NULL,
-                       group = NULL, facet_r = NULL,
-                       facet_c = NULL, facet_scale = 'free',
-                       facet_space = 'free', x_lab = NULL,
-                       y_lab = NULL, title = NULL,
-                       add_counts = TRUE, counts_pos = 'inside-bar',
+                       group = NULL, group_levels = NULL,
+                       facet_r = NULL, facet_c = NULL,
+                       facet_r_levels = NULL, facet_c_levels = NULL,
+                       facet_scale = 'free', facet_space = 'free',
+                       x_lab = NULL, y_lab = NULL, group_lab = group,
+                       title = NULL, add_counts = TRUE, counts_pos = 'inside-bar',
                        bar_label_align = 'left', bar_label_angle = NULL,
                        group_bar_position = 'dodge', grids = 'on',
                        bw_theme = TRUE, horizontal = TRUE) {
@@ -108,12 +119,13 @@ gg_barplot <- function(data, var, var_levels = NULL,
     group_dots <- lapply(group_by_vars, as.symbol)
     data <- group_by_(data, .dots = group_dots)
 
-    # make both var and group a factor
-    if(!is_blank(var_levels)) unique_var <- var_levels
-    else unique_var <- unique(na.omit(data[[var]]))
-    if(horizontal) unique_var <- rev(unique_var)
-    data[[var]] <- factor(data[[var]], levels = unique_var)
-    if(!is_blank(group)) data[[group]] <- factor(data[[group]])
+    # make `var` a factor
+    var_levels <- unlist(var_levels)
+    if(is.null(var_levels)) var_levels <- sort(unique(data[[var]]))
+    if(horizontal) var_levels <- rev(var_levels)
+    data[[var]] <- factor(data[[var]], levels = var_levels)
+    data <- data[!is.na(data[[var]]), , drop = F]
+    if(!is.null(names(var_levels))) levels(data[[var]]) <- names(var_levels)
 
     if(is.null(x_lab)) x_lab <- ifelse(horizontal, 'Counts', var)
     if(is.null(y_lab)) y_lab <- ifelse(horizontal, var, 'Counts')
@@ -122,6 +134,36 @@ gg_barplot <- function(data, var, var_levels = NULL,
         temp <- x_lab
         x_lab <- y_lab
         y_lab <- temp
+    }
+
+    if(!is_blank(facet_r)) {
+        facet_r_levels <- unlist(facet_r_levels)
+        if(is.null(facet_r_levels))
+            facet_r_levels <- sort(unique(data[[facet_r]]))
+        data[[facet_r]] <- factor(data[[facet_r]], levels = facet_r_levels)
+        data <- data[!is.na(data[[facet_r]]), , drop = F]
+        if(!is.null(names(facet_r_levels))) {
+            levels(data[[facet_r]]) <- names(facet_r_levels)
+        }
+    }
+    if(!is_blank(facet_c)) {
+        facet_c_levels <- unlist(facet_c_levels)
+        if(is.null(facet_c_levels))
+            facet_c_levels <- sort(unique(data[[facet_c]]))
+        data[[facet_c]] <- factor(data[[facet_c]], levels = facet_c_levels)
+        data <- data[!is.na(data[[facet_c]]), , drop = F]
+        if(!is.null(names(facet_c_levels))) {
+            levels(data[[facet_c]]) <- names(facet_c_levels)
+        }
+    }
+    if(!is_blank(group)) {
+        group_levels <- unlist(group_levels)
+        if(is.null(group_levels)) group_levels <- sort(unique(data[[group]]))
+        data[[group]] <- factor(data[[group]], levels = group_levels)
+        data <- data[!is.na(data[[group]]), , drop = F]
+        if(!is.null(names(group_levels))) {
+            levels(data[[group]]) <- names(group_levels)
+        }
     }
 
 
@@ -133,7 +175,8 @@ gg_barplot <- function(data, var, var_levels = NULL,
         facet_r = facet_r, facet_c = facet_c,
         facet_scale = facet_scale, facet_space = facet_space,
         x_lab = x_lab, y_lab = y_lab, title = title,
-        fill_var = group, bw_theme = bw_theme, grids = grids
+        fill_var = group, fill_lab = group_lab,
+        bw_theme = bw_theme, grids = grids
     )
 
     if(is_blank(group)) position <- position_identity()

@@ -33,7 +33,8 @@ the data}
 \item{group}{Character: name of a \code{data} column mapped to the fill of
 bars}
 
-\item{group_levels}{Vector: levels of \code{group} column}
+\item{group_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{group}}
 
 \item{facet_r}{Character: name of a \code{data} column mapped to the facet
 row in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for more
@@ -44,10 +45,10 @@ column in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for
 more details}
 
 \item{facet_r_levels}{Vector/List: a named vector/list that specifies the
-levels and labels of facet row.}
+levels and labels of \code{facet_r}}
 
 \item{facet_c_levels}{Vector/List: a named vector/list that specifies the
-levels and labels of facet column.}
+levels and labels of \code{facet_c}}
 
 \item{facet_scale}{Character: Are scales shared across all facets. Refer to
 the `scale` argument in \code{\link[ggplot2]{facet_grid}}. Default `free`

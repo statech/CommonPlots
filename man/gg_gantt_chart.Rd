@@ -5,9 +5,10 @@
 \title{Gantt chart}
 \usage{
 gg_gantt_chart(data, var, var_levels = NULL, time, status = NULL,
-  group = NULL, facet_r = NULL, facet_c = NULL, facet_scale = "free",
-  facet_space = "free", x_lab = NULL, y_lab = NULL, title = NULL,
-  label_align = "left", label_angle = NULL, grids = "on",
+  group = NULL, group_levels = NULL, facet_r = NULL, facet_c = NULL,
+  facet_r_levels = NULL, facet_c_levels = NULL, facet_scale = "free",
+  facet_space = "free", x_lab = NULL, y_lab = NULL, group_lab = group,
+  title = NULL, label_align = "left", label_angle = NULL, grids = "on",
   bw_theme = TRUE, horizontal = TRUE, point_shape_map = if (horizontal) { 
      list(start = 15, end = 16, ongoing = 45) } else {     list(start = 15, end
   = 16, ongoing = 45) }, point_size = 3, point_legend = FALSE)
@@ -37,6 +38,9 @@ long as \code{\link[base]{names}} of \code{point_shape_map}, if not
 \item{group}{Character: name of a \code{data} column mapped to the color of
 the lines}
 
+\item{group_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{group}}
+
 \item{facet_r}{Character: name of a \code{data} column mapped to the facet
 row in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for more
 details}
@@ -44,6 +48,12 @@ details}
 \item{facet_c}{Character: name of a \code{data} column mapped to the facet
 column in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for
 more details}
+
+\item{facet_r_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{facet_r}}
+
+\item{facet_c_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{facet_c}}
 
 \item{facet_scale}{Character: Are scales shared across all facets. Refer to
 the `scale` argument in \code{\link[ggplot2]{facet_grid}}. Default `free`
@@ -56,6 +66,8 @@ width will vary}
 \item{x_lab}{Character: x-axis label}
 
 \item{y_lab}{Character: y-axis label}
+
+\item{group_lab}{Character: group variable label}
 
 \item{title}{Character: barplot title}
 
@@ -120,7 +132,7 @@ test_df <- data.frame(
                     levels = c('start', 'ongoing', 'end'))
 )
 gg_gantt_chart(test_df, var = 'project', time = 'time',
-               status = 'status', grids = 'y')
+               status = 'status', y_lab = '', grids = 'y')
 gg_gantt_chart(test_df, var = 'project', time = 'time',
                status = 'status', point_legend = TRUE)
 

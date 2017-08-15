@@ -28,12 +28,18 @@
 #'  \code{NULL}, match those status phrases.
 #' @param group Character: name of a \code{data} column mapped to the color of
 #'  the lines
+#' @param group_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{group}
 #' @param facet_r Character: name of a \code{data} column mapped to the facet
 #'  row in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for more
 #'  details
 #' @param facet_c Character: name of a \code{data} column mapped to the facet
 #'  column in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for
 #'  more details
+#' @param facet_r_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{facet_r}
+#' @param facet_c_levels Vector/List: a named vector/list that specifies the
+#'  levels and labels of \code{facet_c}
 #' @param facet_scale Character: Are scales shared across all facets. Refer to
 #'  the `scale` argument in \code{\link[ggplot2]{facet_grid}}. Default `free`
 #'  means that scales are not shared
@@ -42,6 +48,7 @@
 #'  width will vary
 #' @param x_lab Character: x-axis label
 #' @param y_lab Character: y-axis label
+#' @param group_lab Character: group variable label
 #' @param title Character: barplot title
 #' @param label_align Character: alignment of the event/project labels. If
 #'  `left` (default), labels will be left-aligned; if `center`, labels will be
@@ -83,7 +90,7 @@
 #'                     levels = c('start', 'ongoing', 'end'))
 #' )
 #' gg_gantt_chart(test_df, var = 'project', time = 'time',
-#'                status = 'status', grids = 'y')
+#'                status = 'status', y_lab = '', grids = 'y')
 #' gg_gantt_chart(test_df, var = 'project', time = 'time',
 #'                status = 'status', point_legend = TRUE)
 #'
@@ -92,10 +99,12 @@
 #'
 #' @author Feiyang Niu (Feiyang.Niu@gilead.com)
 gg_gantt_chart <- function(data, var, var_levels = NULL, time, status = NULL,
-                           group = NULL, facet_r = NULL, facet_c = NULL,
+                           group = NULL, group_levels = NULL,
+                           facet_r = NULL, facet_c = NULL,
+                           facet_r_levels = NULL, facet_c_levels = NULL,
                            facet_scale = 'free', facet_space = 'free',
-                           x_lab = NULL, y_lab = NULL, title = NULL,
-                           label_align = 'left', label_angle = NULL,
+                           x_lab = NULL, y_lab = NULL, group_lab = group,
+                           title = NULL, label_align = 'left', label_angle = NULL,
                            grids = 'on', bw_theme = TRUE, horizontal = TRUE,
                            point_shape_map = if(horizontal) {
                                list('start' = 15, 'end' = 16, 'ongoing' = 45)
@@ -151,12 +160,13 @@ gg_gantt_chart <- function(data, var, var_levels = NULL, time, status = NULL,
     group_dots <- lapply(group_by_vars, as.symbol)
     data <- group_by_(data, .dots = group_dots)
 
-    # make both var and group a factor
-    if(!is_blank(var_levels)) unique_var <- var_levels
-    else unique_var <- unique(na.omit(data[[var]]))
-    if(horizontal) unique_var <- rev(unique_var)
-    data[[var]] <- factor(data[[var]], levels = unique_var)
-    if(!is_blank(group)) data[[group]] <- factor(data[[group]])
+    # make `var` a factor
+    var_levels <- unlist(var_levels)
+    if(is.null(var_levels)) var_levels <- sort(unique(data[[var]]))
+    if(horizontal) var_levels <- rev(var_levels)
+    data[[var]] <- factor(data[[var]], levels = var_levels)
+    data <- data[!is.na(data[[var]]), , drop = F]
+    if(!is.null(names(var_levels))) levels(data[[var]]) <- names(var_levels)
 
     if(is.null(x_lab)) x_lab <- ifelse(horizontal, 'Duration', var)
     if(is.null(y_lab)) y_lab <- ifelse(horizontal, var, 'Duration')
@@ -166,6 +176,36 @@ gg_gantt_chart <- function(data, var, var_levels = NULL, time, status = NULL,
     y_ <- paste0('`', ifelse(horizontal, var, time), '`')
 
 
+    if(!is_blank(facet_r)) {
+        facet_r_levels <- unlist(facet_r_levels)
+        if(is.null(facet_r_levels))
+            facet_r_levels <- sort(unique(data[[facet_r]]))
+        data[[facet_r]] <- factor(data[[facet_r]], levels = facet_r_levels)
+        data <- data[!is.na(data[[facet_r]]), , drop = F]
+        if(!is.null(names(facet_r_levels))) {
+            levels(data[[facet_r]]) <- names(facet_r_levels)
+        }
+    }
+    if(!is_blank(facet_c)) {
+        facet_c_levels <- unlist(facet_c_levels)
+        if(is.null(facet_c_levels))
+            facet_c_levels <- sort(unique(data[[facet_c]]))
+        data[[facet_c]] <- factor(data[[facet_c]], levels = facet_c_levels)
+        data <- data[!is.na(data[[facet_c]]), , drop = F]
+        if(!is.null(names(facet_c_levels))) {
+            levels(data[[facet_c]]) <- names(facet_c_levels)
+        }
+    }
+    if(!is_blank(group)) {
+        group_levels <- unlist(group_levels)
+        if(is.null(group_levels)) group_levels <- sort(unique(data[[group]]))
+        data[[group]] <- factor(data[[group]], levels = group_levels)
+        data <- data[!is.na(data[[group]]), , drop = F]
+        if(!is.null(names(group_levels))) {
+            levels(data[[group]]) <- names(group_levels)
+        }
+    }
+
     #---------------------------
     # make the plot
     #---------------------------
@@ -174,7 +214,8 @@ gg_gantt_chart <- function(data, var, var_levels = NULL, time, status = NULL,
         facet_r = facet_r, facet_c = facet_c,
         facet_scale = facet_scale, facet_space = facet_space,
         x_lab = x_lab, y_lab = y_lab, title = title,
-        color_var = group, bw_theme = bw_theme, grids = grids
+        color_var = group, color_lab = group_lab,
+        bw_theme = bw_theme, grids = grids
     )
     plot_ <- plot_ + geom_line(aes_string(group = var))
     if(!is_blank(status)) {

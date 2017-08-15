@@ -4,12 +4,14 @@
 \alias{gg_barplot}
 \title{Bar plots}
 \usage{
-gg_barplot(data, var, var_levels = NULL, group = NULL, facet_r = NULL,
-  facet_c = NULL, facet_scale = "free", facet_space = "free",
-  x_lab = NULL, y_lab = NULL, title = NULL, add_counts = TRUE,
-  counts_pos = "inside-bar", bar_label_align = "left",
-  bar_label_angle = NULL, group_bar_position = "dodge", grids = "on",
-  bw_theme = TRUE, horizontal = TRUE)
+gg_barplot(data, var, var_levels = NULL, group = NULL,
+  group_levels = NULL, facet_r = NULL, facet_c = NULL,
+  facet_r_levels = NULL, facet_c_levels = NULL, facet_scale = "free",
+  facet_space = "free", x_lab = NULL, y_lab = NULL, group_lab = group,
+  title = NULL, add_counts = TRUE, counts_pos = "inside-bar",
+  bar_label_align = "left", bar_label_angle = NULL,
+  group_bar_position = "dodge", grids = "on", bw_theme = TRUE,
+  horizontal = TRUE)
 }
 \arguments{
 \item{data}{Data frame: default dataset to use for plot}
@@ -17,10 +19,14 @@ gg_barplot(data, var, var_levels = NULL, group = NULL, facet_r = NULL,
 \item{var}{Character: name of a \code{data} column whose counts provided as
 the height of bars}
 
-\item{var_levels}{Character vector: levels of \code{var}}
+\item{var_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{var}}
 
 \item{group}{Character: name of a \code{data} column mapped to the fill of
 bars}
+
+\item{group_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{group}}
 
 \item{facet_r}{Character: name of a \code{data} column mapped to the facet
 row in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for more
@@ -29,6 +35,12 @@ details}
 \item{facet_c}{Character: name of a \code{data} column mapped to the facet
 column in panel plot layout. Check \code{\link[ggplot2]{facet_grid}} for
 more details}
+
+\item{facet_r_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{facet_r}}
+
+\item{facet_c_levels}{Vector/List: a named vector/list that specifies the
+levels and labels of \code{facet_c}}
 
 \item{facet_scale}{Character: Are scales shared across all facets. Refer to
 the `scale` argument in \code{\link[ggplot2]{facet_grid}}. Default `free`
@@ -41,6 +53,8 @@ width will vary}
 \item{x_lab}{Character: x-axis label}
 
 \item{y_lab}{Character: y-axis label}
+
+\item{group_lab}{Character: group variable label}
 
 \item{title}{Character: barplot title}
 
@@ -90,9 +104,11 @@ panel plot layout. Counts information can be added to the corresponding
 bars. By default black-and-white theme is used.
 }
 \examples{
-gg_barplot(mpg, var = 'class', horizontal = FALSE)
-gg_barplot(mpg, var = 'class', group = 'cyl')
-gg_barplot(mpg, var = 'class', group = 'cyl', add_counts = FALSE)
+gg_barplot(mpg, var = 'class', x_lab = '', horizontal = FALSE)
+gg_barplot(mpg, var = 'class', group = 'cyl', group_lab = 'Cylinders')
+var_levels <- c('Mid-size' = 'midsize', 'Minivan' = 'minivan', 'SUV' = 'suv')
+gg_barplot(mpg, var = 'class', var_levels = var_levels,
+           group = 'cyl', group_lab = 'Cylinders', add_counts = FALSE)
 gg_barplot(mpg, var = 'class', group = 'cyl', group_bar_position = 'stack')
 
 }
