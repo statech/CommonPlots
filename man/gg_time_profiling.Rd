@@ -26,7 +26,7 @@ variable, i.e. time}
 \item{y}{Character: name of a \code{data} column mapped to y-axis
 variable}
 
-\item{subject}{Character: name of a \code{data} column mapped subject IDs
+\item{subject}{Character: name of a \code{data} column mapped to subject IDs
 or other types of IDs that define membership of repeated measurements in
 the data}
 
@@ -150,8 +150,10 @@ Creats time-profiling plots with
 \details{
 This function relies on \href{http://ggplot2.org/}{ggplot2} package to
 create time-profiling plots including: Mean + SD/SE plot, Mean + Median
-plot, Boxplot, Spaghetti plot and their mixture. Panel plot layout is
-supported. By default black-and-white theme is used.
+plot, Boxplot, Spaghetti plot and their mixture. Labels can be added to the
+end of each line using
+\href{http://directlabels.r-forge.r-project.org/}{directlabels}.
+Panel plot layout is supported. By default black-and-white theme is used.
 }
 \examples{
 library(CommonPlots)
