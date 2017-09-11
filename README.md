@@ -40,7 +40,7 @@ test_df <- data.frame(
 gg_gantt_chart(test_df, var = 'project', time = 'time',
                status = 'status', grids = 'y')
 ```
-![Barplot](man/figures/gantt_chart.png)
+![Gantt Chart](man/figures/gantt_chart.png)
 
 #### Time-profiling graphs
 
@@ -60,7 +60,7 @@ mean_se_plot <- gg_time_profiling(
     title = 'Mean + SE plot'
 )
 ```
-![Barplot](man/figures/mean_se_plot.png)
+![Mean + SE plot](man/figures/mean_se_plot.png)
 
 ##### Boxplot
 ```
@@ -72,7 +72,7 @@ boxplot <- gg_time_profiling(
     sample_size = FALSE, all_xticks = TRUE
 )
 ```
-![Barplot](man/figures/boxplot.png)
+![Boxplot](man/figures/boxplot_over_time.png)
 
 ##### Spaghetti plot
 ```
@@ -86,7 +86,7 @@ spaghetti_plot <- gg_time_profiling(
     subject_show = TRUE
 )
 ```
-![Barplot](man/figures/spaghetti_plot.png)
+![Spaghetti plot](man/figures/spaghetti_plot.png)
 
 Getting help
 ------------
