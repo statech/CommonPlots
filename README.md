@@ -77,7 +77,7 @@ boxplot <- gg_time_profiling(
     sample_size = FALSE, all_xticks = TRUE
 )
 ```
-![Boxplot](man/figures/boxplot_over_time.png)
+![Box plot](man/figures/boxplot_over_time.png)
 
 ##### Spaghetti plot
 ```
