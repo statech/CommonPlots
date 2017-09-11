@@ -24,6 +24,7 @@ Most of the plots supported in CommonPlots can be easily created through one fun
 library(CommonPlots)
 gg_barplot(mpg, var = 'class', group = 'cyl', add_counts = FALSE)
 ```
+![Barplot](man/figures/barplot.png)
 
 #### Gantt Chart
 
@@ -39,6 +40,7 @@ test_df <- data.frame(
 gg_gantt_chart(test_df, var = 'project', time = 'time',
                status = 'status', grids = 'y')
 ```
+![Barplot](man/figures/gantt_chart.png)
 
 Getting help
 ------------
