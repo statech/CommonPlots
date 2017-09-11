@@ -42,6 +42,52 @@ gg_gantt_chart(test_df, var = 'project', time = 'time',
 ```
 ![Barplot](man/figures/gantt_chart.png)
 
+#### Time-profiling graphs
+
+##### Mean + SE plot
+```
+data(koopLME)
+
+# Mean + SE plot
+data <- koopLME
+data$siblings <- factor(with(data, ifelse(SIBLINGS >= 3, '>= 3', SIBLINGS)),
+                        levels = c(0, 1, 2, '>= 3'))
+mean_se_plot <- gg_time_profiling(
+    data, x = 'TIMETRND', y = 'LOGWAGE', group = 'siblings',
+    geoms = c('sumline'), avg_method = 'mean',
+    var_method = 'se', x_lab = 'Time trend',
+    y_lab = 'Log of hourly wage', group_lab = 'Number of siblings',
+    title = 'Mean + SE plot'
+)
+```
+![Barplot](man/figures/mean_se_plot.png)
+
+##### Boxplot
+```
+# Box plot over time
+boxplot <- gg_time_profiling(
+    koopLME, x = 'TIMETRND', y = 'LOGWAGE',
+    geoms = c('boxplot', 'point'), x_lab = 'Time trend',
+    y_lab = 'Log of hourly wage', title = 'Box plot',
+    sample_size = FALSE, all_xticks = TRUE
+)
+```
+![Barplot](man/figures/boxplot.png)
+
+##### Spaghetti plot
+```
+# Spaghetti plot
+data <- koopLME
+data <- with(data, data[PERSONID %in% unique(PERSONID)[1:100], ])
+spaghetti_plot <- gg_time_profiling(
+    data, x = 'TIMETRND', y = 'LOGWAGE', subject = 'PERSONID',
+    geoms = c('line'), x_lab = 'Time trend',
+    y_lab = 'Log of hourly wage', title = 'Spaghetti plot',
+    subject_show = TRUE
+)
+```
+![Barplot](man/figures/spaghetti_plot.png)
+
 Getting help
 ------------
 
