@@ -70,6 +70,7 @@
 #'  \code{FALSE} (default) otherwise.
 #' @param sample_size Logical: \code{TRUE} (default) to place sample size
 #'  annotation along x-axis tick marks and \code{FALSE} otherwise
+#' @param sample_size_font_size Numeric: font size of sample size annotation
 #' @param reference_hline Numeric vector: locations of horizontal reference
 #'  line(s) if there is any
 #' @param reference_vline Numeric vector: locations of vertical reference
@@ -162,6 +163,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
                               geoms = c('point', 'line', 'sumline', 'boxplot'),
                               avg_method = 'mean', var_method = 'se',
                               y_log = FALSE, sample_size = TRUE,
+                              sample_size_font_size = 3,
                               reference_hline = NULL, reference_vline = NULL,
                               subject_show = FALSE, subject_label_size = 0.8,
                               add_legend = TRUE, legend_pos = 'bottom',
@@ -365,29 +367,56 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
     if(sample_size) {
 
         # for sample size annotation
-        ss_factor <- 0.04
-        fnote_size_ss <- 3 / (1 + 0.5 * (nrows - 1))
+        ss_factor <- 0.04 * sample_size_font_size / 3
+        fnote_size_ss <- sample_size_font_size / (1 + 0.5 * (nrows - 1))
         center_aligned <- 0.5
         slightly_right_aligned <- 0.7
 
-        # extract y-axis range from the ggplot object
-        plot_range_x <- ggplot_build(plot_)$layout$panel_ranges[[1]]$x.range
-        plot_range_y <- ggplot_build(plot_)$layout$panel_ranges[[1]]$y.range
-        min_x <- plot_range_x[1]; max_x <- plot_range_x[2]
-        min_y <- plot_range_y[1]; max_y <- plot_range_y[2]
-        dots_group <- lapply(group_list, as.symbol)
-        dots_summarise <- setNames(list(
-            lazyeval::interp(~n_nna(var), var = as.name(y)),
-            lazyeval::interp(
-                ~min_y-ss_factor*(max_y-min_y)*(as.integer(unique_na(var))-1),
-                var = if(is_blank(group)) 1 else as.name(group)
-            ),
-            lazyeval::interp(~unique_na(var), var = as.name(x))
-        ), c('n', 'y', 'x'))
+        # calculate x-/y-axis range
+        if(any(c('point', 'line', 'boxplot') %in% geoms)) {
+            fun_yrange <- range_na
+        } else if('sumline' %in% geoms) {
+            fun_yrange <- function(x) {
+                res <- fun_data_(x)
+                if(is.na(res$ymin) || is.na(res$ymax)) return(c(res$y, res$y))
+                return(c(res$ymin, res$ymax))
+            }
+        }
+        group_list_ss <- c()
+        if(!is_blank(facet_r)) group_list_ss <- c(group_list_ss, facet_r)
+        if(!is_blank(facet_c)) group_list_ss <- c(group_list_ss, facet_c)
+        yrange <- data %>%
+            group_by_(.dots = lapply(group_list, as.symbol)) %>%
+            do(res = grDevices::extendrange(
+                if(y_log) log(fun_yrange(.[[y]]), base = 10)
+                else fun_yrange(.[[y]])
+            )) %>%
+            mutate(ymin = unlist(res)[1], ymax = unlist(res)[2]) %>%
+            ungroup() %>%
+            group_by_(.dots = lapply(group_list_ss, as.symbol)) %>%
+            summarise(ymin = min(ymin), ymax = max(ymax))
 
+        dots_ss <- setNames(list(
+            lazyeval::interp(~n_nna(var), var = as.name(y)),
+            lazyeval::interp(~unique_na(var), var = as.name(x))
+        ), c('n', 'x'))
         data_ss <- data %>%
-            group_by_(.dots = dots_group) %>%
-            summarise_(.dots = dots_summarise)
+            group_by_(.dots = lapply(group_list, as.symbol)) %>%
+            summarise_(.dots = dots_ss)
+
+        dots_y_pos <- list(y = lazyeval::interp(
+            ~min_y-ss_factor*(max_y-min_y)*(as.integer(unique_na(var_g))-1),
+            min_y = as.name('ymin'), max_y = as.name('ymax'),
+            var_g = if(is_blank(group)) 1 else as.name(group)
+        ))
+        if(length(group_list_ss) == 0) {
+            data_ss$ymin <- yrange$ymin
+            data_ss$ymax <- yrange$ymax
+        } else {
+            data_ss <- left_join(data_ss, yrange)
+        }
+        data_ss <- data_ss %>% mutate_(.dots = dots_y_pos)
+
         if(y_log) data_ss$y <- 10^data_ss$y
         x_1 <- sort(unique_na(data_ss$x))[1]
         data_ss_1 <- filter(data_ss, x == x_1)

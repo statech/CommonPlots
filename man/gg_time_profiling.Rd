@@ -12,10 +12,10 @@ gg_time_profiling(data, x, y, subject = NULL, group = NULL,
   all_xticks = FALSE, x_tick_angle = 0, y_tick_angle = 0,
   geoms = c("point", "line", "sumline", "boxplot"), avg_method = "mean",
   var_method = "se", y_log = FALSE, sample_size = TRUE,
-  reference_hline = NULL, reference_vline = NULL, subject_show = FALSE,
-  subject_label_size = 0.8, add_legend = TRUE, legend_pos = "bottom",
-  all_colors = NULL, all_linetypes = NULL, randseed = 0,
-  return_data = FALSE)
+  sample_size_font_size = 3, reference_hline = NULL,
+  reference_vline = NULL, subject_show = FALSE, subject_label_size = 0.8,
+  add_legend = TRUE, legend_pos = "bottom", all_colors = NULL,
+  all_linetypes = NULL, randseed = 0, return_data = FALSE)
 }
 \arguments{
 \item{data}{Data frame: default dataset to use for plot}
@@ -104,6 +104,8 @@ remove \code{NA}s in calculation}
 
 \item{sample_size}{Logical: \code{TRUE} (default) to place sample size
 annotation along x-axis tick marks and \code{FALSE} otherwise}
+
+\item{sample_size_font_size}{Numeric: font size of sample size annotation}
 
 \item{reference_hline}{Numeric vector: locations of horizontal reference
 line(s) if there is any}
