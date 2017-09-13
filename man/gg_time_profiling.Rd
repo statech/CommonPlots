@@ -197,8 +197,13 @@ spaghetti_plot <- gg_time_profiling(
 )
 
 # Box plot over time
+data <- koopLME
+data$siblings <- factor(with(data, ifelse(SIBLINGS >= 3, '>= 3', SIBLINGS)),
+                        levels = c(0, 1, 2, '>= 3'))
+sib_labels <- paste('Number of siblings:', levels(data$siblings))
 boxplot <- gg_time_profiling(
-    koopLME, x = 'TIMETRND', y = 'LOGWAGE',
+    data, x = 'TIMETRND', y = 'LOGWAGE', facet_r = 'siblings',
+    facet_r_levels = setNames(levels(data$siblings), sib_labels),
     geoms = c('boxplot', 'point'), x_lab = 'Time trend',
     y_lab = 'Log of hourly wage', title = 'Box plot',
     sample_size = FALSE, all_xticks = TRUE
