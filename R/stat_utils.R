@@ -12,6 +12,13 @@ n_nna <- function(vec) {
 }
 
 
+#' @title range() with na.rm = TRUE by default
+range_na <- function(..., na.rm = TRUE) {
+    if(length(na.omit(c(...))) == 0) return(NA)
+    return(range(..., na.rm = na.rm))
+}
+
+
 #' @title Extract Unique Non-NA Elements
 #'
 #' @param obj Object: a vector or a data frame or an array or NULL
@@ -82,7 +89,7 @@ median_iqr <- function(x, type = 2) {
 
 #' @title R version ternary function
 #'
-#' @description 
+#' @description
 #' @param obj_x Object x
 #' @param obj_y Object y
 #' @return \code{obj_x} if \code{expr} is evaluated \code{TRUE} and
@@ -96,3 +103,53 @@ ternary <- function(expr, obj_x, obj_y) {
     else
         return(obj_y)
 }
+
+
+#' @title Test if an object is a formula
+#'
+#' @description
+#' @param x an object
+#' @return \code{TRUE} if \code{x} is a formula and \code{FALSE} otherwise
+#' @examples
+#' is.formula(weight ~ height)
+#'
+#' @export
+#'
+#' @author Feiyang Niu (Feiyang.Niu@gilead.com)
+is.formula <- function(x){
+    return(inherits(x, 'formula'))
+}
+
+
+#' @title Fit an Analysis of Variance Model
+#'
+#' @description Same as code{\link[stats]{aov}} with only one difference that
+#'  p value of the test is added to the result as a component named 'p.value'
+anova.test <- function(...) {
+    res <- aov(...)
+    res$p.value <- summary(res)[[1]][["Pr(>F)"]][[1]]
+    return(res)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,7 +8,7 @@ gg_scatter(data, x, y, label = NULL, facet_r = NULL, facet_c = NULL,
   facet_r_levels = NULL, facet_c_levels = NULL, facet_scale = "free",
   facet_space = "free", color_var = NULL, all_colors = NULL,
   color_lab = color_var, shape_var = NULL, all_shapes = NULL,
-  shape_lab = shape_var, add_label = FALSE, repel_label = FALSE,
+  shape_lab = shape_var, add_label = FALSE, is_repel = FALSE,
   label_xlim = c(-Inf, Inf), label_ylim = c(-Inf, Inf),
   label_xloc = "middle", label_yloc = "middle", x_lab = x, y_lab = y,
   title = "", x_limit = NULL, y_limit = NULL, x_log = FALSE,
@@ -68,7 +68,7 @@ of the points}
 \item{add_label}{Logical: whether or not to add labels for the points
 Default is set to `FALSE`}
 
-\item{repel_label}{Logical: whether or not to avoid text overlapping using
+\item{is_repel}{Logical: whether or not to avoid text overlapping using
 \href{https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html}{ggrepel}}
 
 \item{label_xlim}{Numeric vector of length 2: it defines x-axis range to
@@ -146,14 +146,14 @@ data <- mtcars
 data$model <- row.names(data)
 data$cyl <- factor(data$cyl)
 gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', color_var = 'cyl',
-           color_lab = 'Cylinder', add_label = TRUE, repel_label = TRUE,
+           color_lab = 'Cylinder', add_label = TRUE, is_repel = TRUE,
            label_xlim = c(2, 5), label_xloc = 'sides',
            x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
 
 gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', facet_c = 'cyl',
            facet_c_levels = c('4 Cylinders' = '4', '6 Cylinders' = '6',
                               '8 Cylinders' = '8'),
-           add_label = TRUE, repel_label = TRUE,
+           add_label = TRUE, is_repel = TRUE,
            x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
 
 }

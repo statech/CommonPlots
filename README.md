@@ -69,7 +69,7 @@ data <- koopLME
 data$siblings <- factor(with(data, ifelse(SIBLINGS >= 3, '>= 3', SIBLINGS)),
                         levels = c(0, 1, 2, '>= 3'))
 sib_labels <- paste('Number of siblings:', levels(data$siblings))
-boxplot <- gg_time_profiling(
+boxplot_time <- gg_time_profiling(
     data, x = 'TIMETRND', y = 'LOGWAGE', facet_r = 'siblings',
     facet_r_levels = setNames(levels(data$siblings), sib_labels),
     geoms = c('boxplot', 'point'), x_lab = 'Time trend',
@@ -77,7 +77,7 @@ boxplot <- gg_time_profiling(
     sample_size = FALSE, all_xticks = TRUE
 )
 ```
-![Box plot](man/figures/boxplot_over_time.png)
+![Box plot over time](man/figures/boxplot_over_time.png)
 
 ##### Spaghetti plot
 ```
@@ -92,6 +92,18 @@ spaghetti_plot <- gg_time_profiling(
 )
 ```
 ![Spaghetti plot](man/figures/spaghetti_plot.png)
+
+##### Box plot
+```
+# boxplot with Student's t-Test performed on engine displacement against year
+boxplot_ <- gg_boxplot(
+    mpg, x = 'cyl', y = 'displ', group = 'year', test_func = t.test,
+    test_result = c('T test p value:' = 'p.value'),
+    x_lab = 'Number of cylinders', y_lab = 'Engine displacement (L)',
+    group_lab = 'Year', title = ''
+)
+```
+![Box plot](man/figures/boxplot.png)
 
 Getting help
 ------------

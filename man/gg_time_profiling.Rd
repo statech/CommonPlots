@@ -7,7 +7,7 @@
 gg_time_profiling(data, x, y, subject = NULL, group = NULL,
   group_levels = NULL, facet_r = NULL, facet_c = NULL,
   facet_r_levels = NULL, facet_c_levels = NULL, facet_scale = "free",
-  facet_space = "free", x_lab = x, y_lab = y, group_lab = group,
+  facet_space = "fixed", x_lab = x, y_lab = y, group_lab = group,
   title = "", x_limit = NULL, y_limit = NULL, x_tick_label = x,
   all_xticks = FALSE, x_tick_angle = 0, y_tick_angle = 0,
   geoms = c("point", "line", "sumline", "boxplot"), avg_method = "mean",

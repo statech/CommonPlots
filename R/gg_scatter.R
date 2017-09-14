@@ -43,7 +43,7 @@
 #' @param shape_lab Character: title of shape legend
 #' @param add_label Logical: whether or not to add labels for the points
 #'  Default is set to `FALSE`
-#' @param repel_label Logical: whether or not to avoid text overlapping using
+#' @param is_repel Logical: whether or not to avoid text overlapping using
 #'  \href{https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html}{ggrepel}
 #' @param label_xlim Numeric vector of length 2: it defines x-axis range to
 #'  select points for labelling. See \code{label_xloc} for more details of point
@@ -92,14 +92,14 @@
 #' data$model <- row.names(data)
 #' data$cyl <- factor(data$cyl)
 #' gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', color_var = 'cyl',
-#'            color_lab = 'Cylinder', add_label = TRUE, repel_label = TRUE,
+#'            color_lab = 'Cylinder', add_label = TRUE, is_repel = TRUE,
 #'            label_xlim = c(2, 5), label_xloc = 'sides',
 #'            x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
 #'
 #' gg_scatter(data, x = 'wt', y = 'mpg', label = 'model', facet_c = 'cyl',
 #'            facet_c_levels = c('4 Cylinders' = '4', '6 Cylinders' = '6',
 #'                               '8 Cylinders' = '8'),
-#'            add_label = TRUE, repel_label = TRUE,
+#'            add_label = TRUE, is_repel = TRUE,
 #'            x_lab = 'Weight (1000 lbs)', y_lab = 'Miles/(US) gallon')
 #'
 #' @export
@@ -112,7 +112,7 @@ gg_scatter <- function(data, x, y, label = NULL,
                        facet_scale = 'free', facet_space = 'free',
                        color_var = NULL, all_colors = NULL, color_lab = color_var,
                        shape_var = NULL, all_shapes = NULL, shape_lab = shape_var,
-                       add_label = FALSE, repel_label = FALSE,
+                       add_label = FALSE, is_repel = FALSE,
                        label_xlim = c(-Inf, Inf), label_ylim = c(-Inf, Inf),
                        label_xloc = 'middle', label_yloc = 'middle',
                        x_lab = x, y_lab = y, title = '',
@@ -141,7 +141,7 @@ gg_scatter <- function(data, x, y, label = NULL,
     if(!is_blank(color_var)) column_in_dataframe(data, color_var)
     if(!is_blank(shape_var)) column_in_dataframe(data, shape_var)
     add_label <- isTRUE(add_label)
-    repel_label <- isTRUE(repel_label)
+    is_repel <- isTRUE(is_repel)
     if(add_label && !is_blank(label_xlim))
         check_var_class(label_xlim, is.numeric, 'numeric')
     if(add_label && !is_blank(label_ylim))
@@ -244,7 +244,7 @@ gg_scatter <- function(data, x, y, label = NULL,
         data_label <- data_label[cond_y, , drop = FALSE]
     }
     if(add_label && !is_blank(label)) {
-        if(repel_label) {
+        if(is_repel) {
             plot_ <- plot_ +
                 ggrepel::geom_text_repel(
                     data = data_label,

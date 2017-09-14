@@ -160,7 +160,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
                               group = NULL, group_levels = NULL,
                               facet_r = NULL, facet_c = NULL,
                               facet_r_levels = NULL, facet_c_levels = NULL,
-                              facet_scale = 'free', facet_space = 'free',
+                              facet_scale = 'free', facet_space = 'fixed',
                               x_lab = x, y_lab = y, group_lab = group,
                               title = '', x_limit = NULL, y_limit = NULL,
                               x_tick_label = x, all_xticks = FALSE,
@@ -314,7 +314,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
         y_log = y_log, x_lab = x_lab, y_lab = y_lab, title = title,
         x_limit = NULL, y_limit = y_limit,
         x_tick_angle = x_tick_angle, y_tick_angle = y_tick_angle,
-        facet_scale = 'free', facet_space = 'fixed',
+        facet_scale = facet_scale, facet_space = facet_space,
         add_legend = add_legend, legend_pos = legend_pos,
         color_var = group, all_colors = all_colors, color_lab = group_lab,
         linetype_var = if(is_blank(all_linetypes)) NULL else group,
@@ -418,7 +418,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
             data_ss$ymin <- yrange$ymin
             data_ss$ymax <- yrange$ymax
         } else {
-            data_ss <- left_join(data_ss, yrange)
+            data_ss <- suppressMessages(left_join(data_ss, yrange))
         }
         data_ss <- data_ss %>% mutate_(.dots = dots_y_pos)
 
