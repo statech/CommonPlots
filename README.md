@@ -95,9 +95,12 @@ spaghetti_plot <- gg_time_profiling(
 
 ##### Box plot
 ```
+data <- mpg
+data$cyl <- factor(data$cyl)
+
 # boxplot with Student's t-Test performed on engine displacement against year
 boxplot_ <- gg_boxplot(
-    mpg, x = 'cyl', y = 'displ', group = 'year', test_func = t.test,
+    data, x = 'cyl', y = 'displ', group = 'year', test_func = t.test,
     test_result = c('T test p value:' = 'p.value'),
     x_lab = 'Number of cylinders', y_lab = 'Engine displacement (L)',
     group_lab = 'Year', title = ''
