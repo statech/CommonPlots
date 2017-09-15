@@ -10,7 +10,7 @@ Installation
 ```r
 # Install from GitHub:
 # install.packages("devtools")
-devtools::install_github(repo = "CommonPlots", username = "statech")
+devtools::install_github("statech/CommonPlots")
 ```
 
 Usage
