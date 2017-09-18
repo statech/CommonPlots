@@ -45,7 +45,7 @@ gg_gantt_chart(test_df, var = 'project', time = 'time',
 #### Time-profiling graphs
 
 ##### Mean + SE plot
-```
+```r
 data(koopLME)
 
 # Mean + SE plot
@@ -63,7 +63,7 @@ mean_se_plot <- gg_time_profiling(
 ![Mean + SE plot](man/figures/mean_se_plot.png)
 
 ##### Boxplot
-```
+```r
 # Box plot over time
 data <- koopLME
 data$siblings <- factor(with(data, ifelse(SIBLINGS >= 3, '>= 3', SIBLINGS)),
@@ -80,7 +80,7 @@ boxplot_time <- gg_time_profiling(
 ![Box plot over time](man/figures/boxplot_over_time.png)
 
 ##### Spaghetti plot
-```
+```r
 # Spaghetti plot
 data <- koopLME
 data <- with(data, data[PERSONID %in% unique(PERSONID)[1:100], ])
@@ -94,7 +94,7 @@ spaghetti_plot <- gg_time_profiling(
 ![Spaghetti plot](man/figures/spaghetti_plot.png)
 
 ##### Box plot
-```
+```r
 data <- mpg
 data$cyl <- factor(data$cyl)
 
