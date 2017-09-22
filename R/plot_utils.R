@@ -316,9 +316,7 @@ gg_wrapper <- function(..., facet_r = NULL, facet_c = NULL,
         stop('discrete y-axis does not take descending order')
     }
     if(!x_log) {
-        if(any(!is_blank(x_axis_breaks),
-               !is.null(x_tick_labels),
-               !is_blank(x_limit, empty_str_triggers = FALSE))) {
+        if(any(!is_blank(x_axis_breaks), !is.null(x_tick_labels))) {
             if(is_blank(x_axis_breaks)) x_axis_breaks <- waiver()
             if(is.null(x_tick_labels)) x_tick_labels <- waiver()
             x_axis_draw <- ternary(
@@ -330,8 +328,7 @@ gg_wrapper <- function(..., facet_r = NULL, facet_c = NULL,
             }
             base_plot <- base_plot +
                 x_axis_draw(name = x_lab, breaks = x_axis_breaks,
-                            labels = x_tick_labels, limits = x_limit,
-                            expand = x_expand)
+                            labels = x_tick_labels, expand = x_expand)
         }
     } else {
         force(x_tick_labels)
@@ -343,13 +340,11 @@ gg_wrapper <- function(..., facet_r = NULL, facet_c = NULL,
         if(is_blank(x_expand)) x_expand <- c(0.017, 0)
         base_plot <- base_plot +
             scale_x_continuous(name = x_lab, breaks = x_axis_breaks,
-                               labels = x_tick_labels, limits = x_limit,
-                               trans = trans, expand = x_expand)
+                               labels = x_tick_labels, trans = trans,
+                               expand = x_expand)
     }
     if(!y_log) {
-        if(any(!is_blank(y_axis_breaks),
-               !is.null(y_tick_labels),
-               !is_blank(y_limit, empty_str_triggers = FALSE))) {
+        if(any(!is_blank(y_axis_breaks), !is.null(y_tick_labels))) {
             if(is_blank(y_axis_breaks)) y_axis_breaks <- waiver()
             if(is.null(y_tick_labels)) y_tick_labels <- waiver()
             y_axis_draw <- ternary(
@@ -361,8 +356,7 @@ gg_wrapper <- function(..., facet_r = NULL, facet_c = NULL,
             }
             base_plot <- base_plot +
                 y_axis_draw(name = y_lab, breaks = y_axis_breaks,
-                            labels = y_tick_labels, limits = y_limit,
-                            expand = y_expand)
+                            labels = y_tick_labels, expand = y_expand)
         }
     } else {
         force(y_tick_labels)
@@ -376,8 +370,8 @@ gg_wrapper <- function(..., facet_r = NULL, facet_c = NULL,
         if(is_blank(y_expand)) y_expand <- c(0.025, 0)
         base_plot <- base_plot +
             scale_y_continuous(name = y_lab, breaks = y_axis_breaks,
-                               labels = y_tick_labels, limits = y_limit,
-                               trans = trans, expand = y_expand)
+                               labels = y_tick_labels, trans = trans,
+                               expand = y_expand)
     }
 
     # add horizontal reference line
@@ -449,6 +443,9 @@ gg_wrapper <- function(..., facet_r = NULL, facet_c = NULL,
         base_plot <- base_plot +
             theme(strip.background = element_rect(fill = strip_background_color))
     }
+
+    if(!is.null(x_limit)) base_plot <- base_plot + coord_cartesian(xlim = x_limit)
+    if(!is.null(y_limit)) base_plot <- base_plot + coord_cartesian(ylim = y_limit)
 
     return(base_plot)
 }

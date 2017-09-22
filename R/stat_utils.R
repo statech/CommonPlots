@@ -89,7 +89,6 @@ median_iqr <- function(x, type = 2) {
 
 #' @title R version ternary function
 #'
-#' @description
 #' @param obj_x Object x
 #' @param obj_y Object y
 #' @return \code{obj_x} if \code{expr} is evaluated \code{TRUE} and
@@ -107,7 +106,6 @@ ternary <- function(expr, obj_x, obj_y) {
 
 #' @title Test if an object is a formula
 #'
-#' @description
 #' @param x an object
 #' @return \code{TRUE} if \code{x} is a formula and \code{FALSE} otherwise
 #' @examples
