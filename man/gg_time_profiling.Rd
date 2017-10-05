@@ -84,10 +84,11 @@ x-axis tick marks. By default, the label will be horizontal.}
 y-axis tick marks. By default, the label will be horizontal.}
 
 \item{geoms}{Character vector: specify geometric components to be included
-in the plot. For example, if the user needs to create a boxplot with
-raw data points, specify \code{geoms = c('boxplot', 'point')}; if the user
-wants to create a Mean + SE plot, let \code{geoms = c('sumline', 'point')}
-together with specification of \code{avg_method} and \code{var_method}}
+in the plot. Valid geoms are 'boxplot', 'line', 'point', 'sumline'. For
+example, if the user needs to create a boxplot with raw data points,
+specify \code{geoms = c('boxplot', 'point')}; if the user wants to create a
+Mean + SE plot, let \code{geoms = c('sumline', 'point')} together with
+specification of \code{avg_method} and \code{var_method}}
 
 \item{avg_method}{Character: dicates whether to use \code{\link[base]{mean}}
 (\code{avg_method = 'mean'}) or \code{\link[stats]{median}}. Be noted that
@@ -120,7 +121,8 @@ and \code{FALSE} (default) otherwise}
 \code{FALSE} otherwise}
 
 \item{legend_pos}{Character: dictates the location where to place the legend.
-By default, the legend will be place beneath the actual plot}
+Possible locations are 'left', 'right', 'bottom', 'top'. By default, the
+legend will be place beneath the actual plot, i.e. `legend_pos = 'bottom'`}
 
 \item{all_colors}{Vector of valid color representation: when \code{group} is
 present, categories of \code{group} will take different color for specified

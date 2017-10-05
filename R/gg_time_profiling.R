@@ -54,10 +54,11 @@
 #' @param y_tick_angle Numeric: the orientation angle (in [0, 360]) of the
 #'  y-axis tick marks. By default, the label will be horizontal.
 #' @param geoms Character vector: specify geometric components to be included
-#'  in the plot. For example, if the user needs to create a boxplot with
-#'  raw data points, specify \code{geoms = c('boxplot', 'point')}; if the user
-#'  wants to create a Mean + SE plot, let \code{geoms = c('sumline', 'point')}
-#'  together with specification of \code{avg_method} and \code{var_method}
+#'  in the plot. Valid geoms are 'boxplot', 'line', 'point', 'sumline'. For
+#'  example, if the user needs to create a boxplot with raw data points,
+#'  specify \code{geoms = c('boxplot', 'point')}; if the user wants to create a
+#'  Mean + SE plot, let \code{geoms = c('sumline', 'point')} together with
+#'  specification of \code{avg_method} and \code{var_method}
 #' @param avg_method Character: dicates whether to use \code{\link[base]{mean}}
 #'  (\code{avg_method = 'mean'}) or \code{\link[stats]{median}}. Be noted that
 #'  only these two options are permitted and both methods will remove \code{NA}s
@@ -80,7 +81,8 @@
 #' @param add_legend Logical: \code{TRUE} (default) to show legend and
 #'  \code{FALSE} otherwise
 #' @param legend_pos Character: dictates the location where to place the legend.
-#'  By default, the legend will be place beneath the actual plot
+#'  Possible locations are 'left', 'right', 'bottom', 'top'. By default, the
+#'  legend will be place beneath the actual plot, i.e. `legend_pos = 'bottom'`
 #' @param all_colors Vector of valid color representation: when \code{group} is
 #'  present, categories of \code{group} will take different color for specified
 #'  geometric objects. This argument allows the user to overwrite default color
