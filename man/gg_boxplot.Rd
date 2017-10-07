@@ -2,18 +2,18 @@
 % Please edit documentation in R/gg_boxplot.R
 \name{gg_boxplot}
 \alias{gg_boxplot}
-\title{Time-profiling Plots}
+\title{Box plot}
 \usage{
 gg_boxplot(data, x = NULL, y, group = NULL, group_levels = NULL,
   label = NULL, facet_r = NULL, facet_c = NULL, facet_r_levels = NULL,
   facet_c_levels = NULL, facet_scale = "free", facet_space = "free",
   x_lab = x, y_lab = y, group_lab = group, title = "", x_limit = NULL,
-  y_limit = NULL, y_log = FALSE, add_points = TRUE, point_shape = 19,
-  add_legend = TRUE, legend_pos = "bottom", reference_hline = NULL,
-  reference_vline = NULL, test_func = NULL, test_result = c(`p value` =
-  "p.value"), x_tick_angle = 0, sample_size = TRUE,
-  sample_size_font_size = 3, add_label = FALSE, is_repel = FALSE,
-  bw_theme = TRUE, grids = "on", randseed = 12345)
+  y_limit = NULL, y_log = FALSE, all_colors = NULL, add_points = TRUE,
+  point_shape = 19, add_legend = TRUE, legend_pos = "bottom",
+  reference_hline = NULL, reference_vline = NULL, test_func = NULL,
+  test_result = c(`p value` = "p.value"), x_tick_angle = 0,
+  sample_size = TRUE, sample_size_font_size = 3, add_label = FALSE,
+  is_repel = FALSE, bw_theme = TRUE, grids = "on", randseed = 12345)
 }
 \arguments{
 \item{data}{Data frame: default dataset to use for plot}
@@ -24,8 +24,8 @@ variable, i.e. time}
 \item{y}{Character: name of a \code{data} column mapped to y-axis
 variable}
 
-\item{group}{Character: name of a \code{data} column mapped to the fill of
-bars}
+\item{group}{Character: name of a \code{data} column mapped to the color of
+points}
 
 \item{group_levels}{Vector/List: a named vector/list that specifies the
 levels and labels of \code{group}}
@@ -61,7 +61,7 @@ width will vary}
 
 \item{group_lab}{Character: group variable label}
 
-\item{title}{Character: barplot title}
+\item{title}{Character: boxplot title}
 
 \item{x_limit}{Numeric vector of length 2: limits for x-axis, e.g.
 \code{c(0, 10)}.}
@@ -71,6 +71,11 @@ width will vary}
 
 \item{y_log}{Logical: \code{TRUE} to use log-scale for y-axis and
 \code{FALSE} (default) otherwise.}
+
+\item{all_colors}{Vector: a vector of valid color representations for all
+the point colors. When `group` is mapped to the color of points, specify
+`all_colors` to change default colors. See \code{\link{is.color}} for valid
+color definition}
 
 \item{add_points}{Logical: \code{TRUE} (default) to add original data points,
 jittered along x-axis}
@@ -141,16 +146,15 @@ An object of class ggplot (if \code{return_data = FALSE}) or a list
  generate the plot
 }
 \description{
-Creats time-profiling plots with
-\href{https://en.wikipedia.org/wiki/Panel_data}{longitudinal data}
+Creates a box plot
 }
 \details{
 This function relies on \href{http://ggplot2.org/}{ggplot2} package to
-create time-profiling plots including: Mean + SD/SE plot, Mean + Median
-plot, Boxplot, Spaghetti plot and their mixture. Labels can be added to the
-end of each line using
-\href{http://directlabels.r-forge.r-project.org/}{directlabels}.
-Panel plot layout is supported. By default black-and-white theme is used.
+create a box plot with ability to label points. Point labelling has the
+option to repel text overlapping with
+\href{https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html}{ggrepel}.
+The function supports panel plot layout. By default black-and-white theme is
+used.
 }
 \examples{
 library(CommonPlots)

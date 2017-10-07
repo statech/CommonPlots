@@ -78,6 +78,12 @@
 #'  line(s) if there is any
 #' @param reference_vline Numeric vector: locations of vertical reference
 #'  line(s) if there is any
+#' @param smooth_line Character: smoothing line type to be added to the points.
+#'  Valid smoothing line types include `NULL` (default), "identity", "lm",
+#'  "glm", "gam", "loess", "rlm". See also `method` argument in
+#'  \code{\link[ggplot2]{geom_smooth}}. When `NULL`, no line is added
+#' @param smooth_line_ci Logical: display confidence interval around smooth. By
+#'  default (`FALSE`), confidence interval is not displayed
 #' @param bw_theme Logical: If `TRUE` (default), black-and-white theme will be
 #'  used. Refer to \code{\link[ggplot2]{theme_bw}} for more details
 #' @param grids Character: grids option. Must be one of `c('on', 'major',
@@ -120,6 +126,7 @@ gg_scatter <- function(data, x, y, label = NULL,
                        x_log = FALSE, y_log = FALSE,
                        add_legend = TRUE, legend_pos = 'bottom',
                        reference_hline = NULL, reference_vline = NULL,
+                       smooth_line = NULL, smooth_line_ci = FALSE,
                        bw_theme = TRUE, grids = 'on') {
 
     #-----------------------------
@@ -220,6 +227,16 @@ gg_scatter <- function(data, x, y, label = NULL,
 
     # add points
     plot_ <- plot_ + geom_point()
+
+    # add smoothing line
+    if(!is.null(smooth_line)) {
+        if(smooth_line == 'identity') {
+            plot_ <- geom_abline(intercept = 0, slope = 1)
+        } else {
+            plot_ <- plot_ + geom_smooth(method = smooth_line,
+                                         se = smooth_line_ci)
+        }
+    }
 
     # add labels
     data_label <- data

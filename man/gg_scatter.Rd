@@ -13,8 +13,8 @@ gg_scatter(data, x, y, label = NULL, facet_r = NULL, facet_c = NULL,
   label_xloc = "middle", label_yloc = "middle", x_lab = x, y_lab = y,
   title = "", x_limit = NULL, y_limit = NULL, x_log = FALSE,
   y_log = FALSE, add_legend = TRUE, legend_pos = "bottom",
-  reference_hline = NULL, reference_vline = NULL, bw_theme = TRUE,
-  grids = "on")
+  reference_hline = NULL, reference_vline = NULL, smooth_line = NULL,
+  smooth_line_ci = FALSE, bw_theme = TRUE, grids = "on")
 }
 \arguments{
 \item{data}{Data frame: default dataset to use for plot}
@@ -118,6 +118,14 @@ line(s) if there is any}
 
 \item{reference_vline}{Numeric vector: locations of vertical reference
 line(s) if there is any}
+
+\item{smooth_line}{Character: smoothing line type to be added to the points.
+Valid smoothing line types include `NULL` (default), "identity", "lm",
+"glm", "gam", "loess", "rlm". See also `method` argument in
+\code{\link[ggplot2]{geom_smooth}}. When `NULL`, no line is added}
+
+\item{smooth_line_ci}{Logical: display confidence interval around smooth. By
+default (`FALSE`), confidence interval is not displayed}
 
 \item{bw_theme}{Logical: If `TRUE` (default), black-and-white theme will be
 used. Refer to \code{\link[ggplot2]{theme_bw}} for more details}

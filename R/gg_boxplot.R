@@ -1,22 +1,21 @@
-#' Time-profiling Plots
+#' Box plot
 #'
-#' Creats time-profiling plots with
-#' \href{https://en.wikipedia.org/wiki/Panel_data}{longitudinal data}
+#' Creates a box plot
 #'
 #' This function relies on \href{http://ggplot2.org/}{ggplot2} package to
-#' create time-profiling plots including: Mean + SD/SE plot, Mean + Median
-#' plot, Boxplot, Spaghetti plot and their mixture. Labels can be added to the
-#' end of each line using
-#' \href{http://directlabels.r-forge.r-project.org/}{directlabels}.
-#' Panel plot layout is supported. By default black-and-white theme is used.
+#' create a box plot with ability to label points. Point labelling has the
+#' option to repel text overlapping with
+#' \href{https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html}{ggrepel}.
+#' The function supports panel plot layout. By default black-and-white theme is
+#' used.
 #'
 #' @param data Data frame: default dataset to use for plot
 #' @param x Character: name of a \code{data} column mapped to x-axis
 #'  variable, i.e. time
 #' @param y Character: name of a \code{data} column mapped to y-axis
 #'  variable
-#' @param group Character: name of a \code{data} column mapped to the fill of
-#'  bars
+#' @param group Character: name of a \code{data} column mapped to the color of
+#'  points
 #' @param group_levels Vector/List: a named vector/list that specifies the
 #'  levels and labels of \code{group}
 #' @param label Character: name of a \code{data} column used to label the points
@@ -40,13 +39,17 @@
 #' @param x_lab Character: x-axis label
 #' @param y_lab Character: y-axis label
 #' @param group_lab Character: group variable label
-#' @param title Character: barplot title
+#' @param title Character: boxplot title
 #' @param x_limit Numeric vector of length 2: limits for x-axis, e.g.
 #'  \code{c(0, 10)}.
 #' @param y_limit Numeric vector of length 2: limits for y-axis, e.g.
 #'  \code{c(-5, 5)}
 #' @param y_log Logical: \code{TRUE} to use log-scale for y-axis and
 #'  \code{FALSE} (default) otherwise.
+#' @param all_colors Vector: a vector of valid color representations for all
+#'  the point colors. When `group` is mapped to the color of points, specify
+#'  `all_colors` to change default colors. See \code{\link{is.color}} for valid
+#'  color definition
 #' @param add_points Logical: \code{TRUE} (default) to add original data points,
 #'  jittered along x-axis
 #' @param point_shape integer: valid point shape when \code{add_points} is
@@ -142,7 +145,7 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
                        facet_scale = 'free', facet_space = 'free',
                        x_lab = x, y_lab = y, group_lab = group, title = '',
                        x_limit = NULL, y_limit = NULL, y_log = FALSE,
-                       add_points = TRUE, point_shape = 19,
+                       all_colors = NULL, add_points = TRUE, point_shape = 19,
                        add_legend = TRUE, legend_pos = 'bottom',
                        reference_hline = NULL, reference_vline = NULL,
                        test_func = NULL, test_result = c('p value' = 'p.value'),
@@ -292,7 +295,7 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
         x_axis_breaks = x_axis_breaks, x_tick_labels = x_tick_labels,
         x_tick_angle = x_tick_angle,
         add_legend = add_legend, legend_pos = legend_pos,
-        color_var = group, color_lab = group_lab,
+        color_var = group, all_colors = all_colors, color_lab = group_lab,
         reference_hline = reference_hline, reference_vline = reference_vline,
         bw_theme = bw_theme, grids = grids, x_expand = x_expand
     )
