@@ -4,10 +4,15 @@
 \alias{JonckheereTerpstraTest}
 \title{Exact Version of Jonckheere-Terpstra Test}
 \usage{
-JonckheereTerpstraTest(...)
+JonckheereTerpstraTest(formula, data, ...)
+}
+\arguments{
+\item{formula}{a formula of the form `y ~ group` where y gives the data
+values and group the corresponding groups.}
+
+\item{data}{a data.frame containing the variables in the formula `formula`}
 }
 \description{
 Jonckheere-Terpstra test to test for ordered differences among
- classes. Please refer to \code{\link[DescTools]{JonckheereTerpstraTest}} for
- more details
+ classes.
 }

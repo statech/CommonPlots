@@ -136,12 +136,16 @@ anova.test <- function(...) {
 #' @title Exact Version of Jonckheere-Terpstra Test
 #'
 #' @description Jonckheere-Terpstra test to test for ordered differences among
-#'  classes. Please refer to \code{\link[DescTools]{JonckheereTerpstraTest}} for
-#'  more details
+#'  classes.
+#'
+#' @param formula a formula of the form `y ~ group` where y gives the data
+#'  values and group the corresponding groups.
+#' @param data a data.frame containing the variables in the formula `formula`
 #'
 #' @export
-JonckheereTerpstraTest <- function(...) {
-    DescTools::JonckheereTerpstraTest(...)
+JonckheereTerpstraTest <- function(formula, data, ...) {
+    vars <- all.vars(formula)
+    clinfun::jonckheere.test(data[[vars[1]]], data[[vars[2]]])
 }
 
 
