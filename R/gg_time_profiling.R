@@ -432,7 +432,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
         }
         data_ss <- data_ss %>% mutate_(.dots = dots_y_pos)
 
-        # line up y's in different panels
+        # align y's in different panels
         if(!is_blank(facet_c)) {
             group_list_y <- c()
             if(!is_blank(facet_r)) group_list_y <- c(group_list_y, facet_r)

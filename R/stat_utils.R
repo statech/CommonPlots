@@ -122,11 +122,26 @@ is.formula <- function(x){
 #' @title Fit an Analysis of Variance Model
 #'
 #' @description Same as code{\link[stats]{aov}} with only one difference that
-#'  p value of the test is added to the result as a component named 'p.value'
+#'  p value of the test is added to the result as a component named 'p.value'.
+#'  Please refer to \code{\link[stats]{aov}} for more details
+#' @export
 anova.test <- function(...) {
     res <- aov(...)
     res$p.value <- summary(res)[[1]][["Pr(>F)"]][[1]]
     return(res)
+}
+
+
+
+#' @title Exact Version of Jonckheere-Terpstra Test
+#'
+#' @description Jonckheere-Terpstra test to test for ordered differences among
+#'  classes. Please refer to \code{\link[DescTools]{JonckheereTerpstraTest}} for
+#'  more details
+#'
+#' @export
+JonckheereTerpstraTest <- function(...) {
+    DescTools::JonckheereTerpstraTest(...)
 }
 
 

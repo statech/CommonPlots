@@ -7,7 +7,7 @@ Version: 0.1.0
 Author: Feiyang Niu <Feiyang.Niu@gilead.com>
 Maintainer: Feiyang Niu <Feiyang.Niu@gilead.com>
 Depends: R (>= 3.3.0), ggplot2 (>= 2.2.1)
-Imports: dplyr (>= 0.5.0), reshape2 (>= 1.4.2), grDevices (>= 3.4.0), lazyeval, scales (>= 0.4.1), directlabels (>= 2017.03.31), ggrepel (>= 0.6.5)
+Imports: dplyr (>= 0.5.0), reshape2 (>= 1.4.2), grDevices (>= 3.4.0), lazyeval, scales (>= 0.4.1), directlabels (>= 2017.03.31), ggrepel (>= 0.6.5), DescTools (>= 0.99.22)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

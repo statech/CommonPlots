@@ -100,13 +100,15 @@ line(s) if there is any}
 \item{test_func}{function: the function to be applied to perform statistical
 test of \code{y} variable against \code{group}, if present, or \code{x}, if
 \code{group} is not present but \code{x} is. Typically, equality test is of
-interest and includes
- * Student's t-Test (`test_func = t.test`)
- * Wilcoxon Rank Sum and Signed Rank Tests (`test_func = wilcox.test`)
- * ANOVA test (`test_func = CommonPlots::anova.test`)
- * Kruskal-Wallis Rank Sum Test (`test_func = kruskal.test`)
-In fact, arbitrary test function which takes 'formula' and 'data' as its
-first two arguments can be passed through \code{test_func}}
+interest and includes Student's t-Test (`test_func = t.test`),
+Wilcoxon Rank Sum and Signed Rank Tests (`test_func = wilcox.test`),
+ANOVA test (`test_func = CommonPlots::anova.test`),
+Kruskal-Wallis Rank Sum Test (`test_func = kruskal.test`).
+Besides, Jonckheere-Terpstra trend test (DescTools::JonckheereTerpstraTest)
+is also supported and can be specified as
+`test_func = CommonPlots::JonckheereTerpstraTest`. In fact, arbitrary test
+function which takes 'formula' and 'data' as its first two arguments can be
+passed through \code{test_func}}
 
 \item{test_result}{(named) String/List: Specify which component from the
 test, \code{test_func}, to be displayed in the box plot. Note that only one

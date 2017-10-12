@@ -8,5 +8,6 @@
 }
 \description{
 Same as code{\link[stats]{aov}} with only one difference that
- p value of the test is added to the result as a component named 'p.value'
+ p value of the test is added to the result as a component named 'p.value'.
+ Please refer to \code{\link[stats]{aov}} for more details
 }

@@ -66,13 +66,15 @@
 #' @param test_func function: the function to be applied to perform statistical
 #'  test of \code{y} variable against \code{group}, if present, or \code{x}, if
 #'  \code{group} is not present but \code{x} is. Typically, equality test is of
-#'  interest and includes
-#'   * Student's t-Test (`test_func = t.test`)
-#'   * Wilcoxon Rank Sum and Signed Rank Tests (`test_func = wilcox.test`)
-#'   * ANOVA test (`test_func = CommonPlots::anova.test`)
-#'   * Kruskal-Wallis Rank Sum Test (`test_func = kruskal.test`)
-#'  In fact, arbitrary test function which takes 'formula' and 'data' as its
-#'  first two arguments can be passed through \code{test_func}
+#'  interest and includes Student's t-Test (`test_func = t.test`),
+#'  Wilcoxon Rank Sum and Signed Rank Tests (`test_func = wilcox.test`),
+#'  ANOVA test (`test_func = CommonPlots::anova.test`),
+#'  Kruskal-Wallis Rank Sum Test (`test_func = kruskal.test`).
+#'  Besides, Jonckheere-Terpstra trend test (DescTools::JonckheereTerpstraTest)
+#'  is also supported and can be specified as
+#'  `test_func = CommonPlots::JonckheereTerpstraTest`. In fact, arbitrary test
+#'  function which takes 'formula' and 'data' as its first two arguments can be
+#'  passed through \code{test_func}
 #' @param test_result (named) String/List: Specify which component from the
 #'  test, \code{test_func}, to be displayed in the box plot. Note that only one
 #'  component is allowed and \code{test_result} must be a named component of the
@@ -245,7 +247,8 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
     if(!is_blank(group)) {
         group_levels <- unlist(group_levels)
         if(is.null(group_levels)) group_levels <- sort(unique(data[[group]]))
-        data[[group]] <- factor(data[[group]], levels = group_levels)
+        data[[group]] <- factor(data[[group]], levels = group_levels,
+                                ordered = TRUE)
         data <- data[!is.na(data[[group]]), , drop = F]
         if(!is.null(names(group_levels))) {
             levels(data[[group]]) <- names(group_levels)
@@ -256,7 +259,8 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
         facet_r_levels <- unlist(facet_r_levels)
         if(is.null(facet_r_levels))
             facet_r_levels <- sort(unique(data[[facet_r]]))
-        data[[facet_r]] <- factor(data[[facet_r]], levels = facet_r_levels)
+        data[[facet_r]] <- factor(data[[facet_r]], levels = facet_r_levels,
+                                  ordered = TRUE)
         data <- data[!is.na(data[[facet_r]]), , drop = F]
         if(!is.null(names(facet_r_levels))) {
             levels(data[[facet_r]]) <- names(facet_r_levels)
@@ -456,7 +460,7 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
         }
         data_ss <- data_ss %>% mutate_(.dots = dots_y_pos)
 
-        # line up y's in different panels
+        # align y's in different panels
         if(!is_blank(facet_c)) {
             group_list_y <- c()
             if(!is_blank(facet_r)) group_list_y <- c(group_list_y, facet_r)
