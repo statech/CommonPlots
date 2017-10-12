@@ -13,7 +13,8 @@ gg_boxplot(data, x = NULL, y, group = NULL, group_levels = NULL,
   reference_hline = NULL, reference_vline = NULL, test_func = NULL,
   test_result = c(`p value` = "p.value"), x_tick_angle = 0,
   sample_size = TRUE, sample_size_font_size = 3, add_label = FALSE,
-  is_repel = FALSE, bw_theme = TRUE, grids = "on", randseed = 12345)
+  is_repel = FALSE, jitter_factor = 1, bw_theme = TRUE, grids = "on",
+  randseed = NULL)
 }
 \arguments{
 \item{data}{Data frame: default dataset to use for plot}
@@ -133,12 +134,19 @@ Default is set to `FALSE`}
 \item{is_repel}{Logical: whether or not to avoid text overlapping using
 \href{https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html}{ggrepel}}
 
+\item{jitter_factor}{Numeric: determines how much the points are jittered
+over x-axis when `add_points = TRUE`. By default, `jitter_factor = 1`}
+
+\item{bw_theme}{Logical: If `TRUE` (default), black-and-white theme will be
+used. Refer to \code{\link[ggplot2]{theme_bw}} for more details}
+
 \item{grids}{Character: grids option. Must be one of `c('on', 'major',
 'off')` with 'on' having both major and minor grids, 'major' having only
 major grids, and 'off' having no grids}
 
 \item{randseed}{Numeric: random seed can be set in producing jittered points
-when \code{add_points} is \code{TRUE}}
+when \code{add_points} is \code{TRUE}. By default, no random seed is set,
+i.e. `randseed = NULL`}
 }
 \value{
 An object of class ggplot (if \code{return_data = FALSE}) or a list

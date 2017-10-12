@@ -93,11 +93,16 @@
 #'  Default is set to `FALSE`
 #' @param is_repel Logical: whether or not to avoid text overlapping using
 #'  \href{https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html}{ggrepel}
+#' @param jitter_factor Numeric: determines how much the points are jittered
+#'  over x-axis when `add_points = TRUE`. By default, `jitter_factor = 1`
+#' @param bw_theme Logical: If `TRUE` (default), black-and-white theme will be
+#'  used. Refer to \code{\link[ggplot2]{theme_bw}} for more details
 #' @param grids Character: grids option. Must be one of `c('on', 'major',
 #'  'off')` with 'on' having both major and minor grids, 'major' having only
 #'  major grids, and 'off' having no grids
 #' @param randseed Numeric: random seed can be set in producing jittered points
-#'  when \code{add_points} is \code{TRUE}
+#'  when \code{add_points} is \code{TRUE}. By default, no random seed is set,
+#'  i.e. `randseed = NULL`
 #'
 #' @return An object of class ggplot (if \code{return_data = FALSE}) or a list
 #'  of two components: an object of class ggplot and a data frame that used to
@@ -151,8 +156,8 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
                        test_func = NULL, test_result = c('p value' = 'p.value'),
                        x_tick_angle = 0, sample_size = TRUE,
                        sample_size_font_size = 3, add_label = FALSE,
-                       is_repel = FALSE, bw_theme = TRUE, grids = 'on',
-                       randseed = 12345) {
+                       is_repel = FALSE, jitter_factor = 1, bw_theme = TRUE,
+                       grids = 'on', randseed = NULL) {
 
     #-----------------------------
     # argument match & error catch
@@ -273,9 +278,8 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
         data[[x_point_var]] <- data[[x_point_var]] + shift * dodge_width
     }
     if(add_points) {
-        jitter_factor <- 0.2
         data[[x_point_var]] <- gg_jitter(
-            data[[x_point_var]], dodge_width * jitter_factor, randseed
+            data[[x_point_var]], dodge_width * jitter_factor * 0.2, randseed
         )
     }
 
@@ -451,6 +455,24 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
             data_ss <- suppressMessages(left_join(data_ss, yrange))
         }
         data_ss <- data_ss %>% mutate_(.dots = dots_y_pos)
+
+        # line up y's in different panels
+        if(!is_blank(facet_c)) {
+            group_list_y <- c()
+            if(!is_blank(facet_r)) group_list_y <- c(group_list_y, facet_r)
+            if(!is_blank(group)) group_list_y <- c(group_list_y, group)
+            data_ss <- data_ss %>%
+                ungroup() %>%
+                group_by_(.dots = lapply(group_list_y, as.symbol)) %>%
+                mutate(y = min(y))
+            if(facet_scale %in% c('fixed', 'free_x')) {
+                data_ss <- data_ss %>%
+                    ungroup() %>%
+                    group_by_(group) %>%
+                    mutate(y = min(y))
+            }
+        }
+
         if(y_log) data_ss$y <- 10^data_ss$y
         x_1 <- sort(unique_na(data_ss$x))[1]
         data_ss_1 <- filter(data_ss, x == x_1)

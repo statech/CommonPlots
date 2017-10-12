@@ -93,8 +93,16 @@
 #'  allows the user to overwrite the default line types. See
 #'  \href{http://sape.inf.usi.ch/quick-reference/ggplot2/linetype}{linetypes}
 #'  for valid ggplot2 linetype specification
+#' @param bw_theme Logical: if `TRUE` (default), black-and-white theme will be
+#'  used. Refer to \code{\link[ggplot2]{theme_bw}} for more details
+#' @param jitter_factor Numeric: determines how much the points are jittered
+#'  over x-axis when `geoms` includes 'point'. By default, `jitter_factor = 1`
+#' @param grids Character: control the grids. If `on` (default), grids will be
+#'  drawn; if `x`, only grids on x-axis will be drawn; if `y`, only grids on
+#'  y-axis will be drawn; if `off`, no grids will be drawn
 #' @param randseed Numeric: random seed can be set in producing jittered points
-#'  when \code{geoms} includes `point`
+#'  when \code{geoms} includes `point`. By default, no random seed is set,
+#'  i.e. `randseed = NULL`
 #' @param return_data Logical: \code{TRUE} to return both plot and the data
 #'  used to produce the plot and \code{FALSE} (default) to return only plot
 #'
@@ -175,9 +183,8 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
                               subject_show = FALSE, subject_label_size = 0.8,
                               add_legend = TRUE, legend_pos = 'bottom',
                               all_colors = NULL, all_linetypes = NULL,
-                              randseed = 0, return_data = FALSE) {
-
-    set.seed(randseed)
+                              jitter_factor = 1, grids = 'on', bw_theme = TRUE,
+                              randseed = NULL, return_data = FALSE) {
 
     #---------------------------
     # error-catch
@@ -217,6 +224,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
     return_data <- isTRUE(return_data)
     all_xticks <- isTRUE(all_xticks)
     subject_show <- isTRUE(subject_show)
+    bw_theme <- isTRUE(bw_theme)
     if(!is.null(avg_method))
         avg_method <- match.arg(tolower(avg_method),choices = c('mean', 'median'))
     if(!is.null(var_method))
@@ -224,6 +232,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
     geoms <- tolower(geoms)
     legend_pos <- match.arg(tolower(legend_pos),
                             c('left', 'right', 'bottom', 'top'))
+    arg_in_choices(grids, c('on', 'x', 'y', 'off'))
 
     #---------------------------
     # define constants (those could be moved to the function arguments)
@@ -233,7 +242,6 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
     point_alpha <- 0.5
     dodge_boxplot_factor <- 0.75
     dodge_line_factor <- 0.4
-    jitter_factor <- 0.25
     errorbar_factor <-0.6
     x_point_var <- 'x_point'
 
@@ -294,11 +302,11 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
     dodge_ <- position_dodge(dodge_geom)
     if('point' %in% geoms) {
         if(ngroups > 1) {
-            shift <- (as.integer(data[[group]]) - median(1:ngroups))/ngroups
+            shift <- (as.integer(data[[group]]) - median(1:ngroups)) / ngroups
             data[[x_point_var]] <- data[[x]] + shift * dodge_geom
         } else data[[x_point_var]] <- data[[x]]
         data[[x_point_var]] <- gg_jitter(
-            data[[x_point_var]], dodge_geom * jitter_factor, randseed
+            data[[x_point_var]], dodge_geom * jitter_factor * 0.25, randseed
         )
     }
 
@@ -323,7 +331,7 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
         all_linetypes = all_linetypes, linetype_lab = group_lab,
         reference_hline = reference_hline,
         reference_vline = reference_vline,
-        x_expand = x_expand
+        x_expand = x_expand, bw_theme = bw_theme, grids = grids
     )
 
     if('boxplot' %in% geoms) {
@@ -423,6 +431,23 @@ gg_time_profiling <- function(data, x, y, subject = NULL,
             data_ss <- suppressMessages(left_join(data_ss, yrange))
         }
         data_ss <- data_ss %>% mutate_(.dots = dots_y_pos)
+
+        # line up y's in different panels
+        if(!is_blank(facet_c)) {
+            group_list_y <- c()
+            if(!is_blank(facet_r)) group_list_y <- c(group_list_y, facet_r)
+            if(!is_blank(group)) group_list_y <- c(group_list_y, group)
+            data_ss <- data_ss %>%
+                ungroup() %>%
+                group_by_(.dots = lapply(group_list_y, as.symbol)) %>%
+                mutate(y = min(y))
+            if(facet_scale %in% c('fixed', 'free_x')) {
+                data_ss <- data_ss %>%
+                    ungroup() %>%
+                    group_by_(group) %>%
+                    mutate(y = min(y))
+            }
+        }
 
         if(y_log) data_ss$y <- 10^data_ss$y
         x_1 <- sort(unique_na(data_ss$x))[1]

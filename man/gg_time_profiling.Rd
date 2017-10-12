@@ -15,7 +15,8 @@ gg_time_profiling(data, x, y, subject = NULL, group = NULL,
   sample_size_font_size = 3, reference_hline = NULL,
   reference_vline = NULL, subject_show = FALSE, subject_label_size = 0.8,
   add_legend = TRUE, legend_pos = "bottom", all_colors = NULL,
-  all_linetypes = NULL, randseed = 0, return_data = FALSE)
+  all_linetypes = NULL, jitter_factor = 1, grids = "on",
+  bw_theme = TRUE, randseed = NULL, return_data = FALSE)
 }
 \arguments{
 \item{data}{Data frame: default dataset to use for plot}
@@ -136,8 +137,19 @@ allows the user to overwrite the default line types. See
 \href{http://sape.inf.usi.ch/quick-reference/ggplot2/linetype}{linetypes}
 for valid ggplot2 linetype specification}
 
+\item{jitter_factor}{Numeric: determines how much the points are jittered
+over x-axis when `geoms` includes 'point'. By default, `jitter_factor = 1`}
+
+\item{grids}{Character: control the grids. If `on` (default), grids will be
+drawn; if `x`, only grids on x-axis will be drawn; if `y`, only grids on
+y-axis will be drawn; if `off`, no grids will be drawn}
+
+\item{bw_theme}{Logical: if `TRUE` (default), black-and-white theme will be
+used. Refer to \code{\link[ggplot2]{theme_bw}} for more details}
+
 \item{randseed}{Numeric: random seed can be set in producing jittered points
-when \code{geoms} includes `point`}
+when \code{geoms} includes `point`. By default, no random seed is set,
+i.e. `randseed = NULL`}
 
 \item{return_data}{Logical: \code{TRUE} to return both plot and the data
 used to produce the plot and \code{FALSE} (default) to return only plot}
