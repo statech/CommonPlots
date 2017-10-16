@@ -472,7 +472,8 @@ gg_boxplot <- function(data, x = NULL, y, group = NULL, group_levels = NULL,
             if(facet_scale %in% c('fixed', 'free_x')) {
                 data_ss <- data_ss %>%
                     ungroup() %>%
-                    group_by_(group) %>%
+                    group_by_(.dots = ternary(is_blank(group), list(),
+                                              as.symbol(group))) %>%
                     mutate(y = min(y))
             }
         }
